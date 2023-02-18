@@ -1,20 +1,33 @@
 import torch
+import spacy
+from collections import Counter
 
 def read_file(file_path):
     with open(file_path, 'r') as f:
         text = f.read()
     return text
 
-def load_data(file_path):
+def load_data(file_path, min_freq=3):
     text = read_file(file_path)
-    chars = sorted(list(set(text)))
-    stoi = {s:i for i, s in enumerate(chars)}
-    itos = {i:s for i, s in enumerate(chars)}
-    encode = lambda s: [stoi[c] for c in s]
-    decode = lambda e: ''.join([itos[i] for i in e])
+    word2id = {'<PAD>':0, '<UNK>':1}
+    id2word = {0:'<PAD>', 1:'<UNK>'}
+    word_freq = {}
+
+    wc = Counter()
+    for word in text.strip().split(' '):
+        wc[word.lower()] += 1
+
+    for word, count in wc.most_common():
+        if count < min_freq: break
+        wid = len(word2id)
+        word2id[word] = wid
+        id2word[wid] = word
+
+    encode = lambda s: [word2id[c.lower()] if c in word2id else word2id['<UNK>'] for c in s.strip().split()]
+    decode = lambda e: ' '.join([id2word[i] for i in e])
     data = torch.tensor(encode(text), dtype=torch.long)
     train_data, val_data = split_data(data)
-    return train_data, val_data, encode, decode, len(chars)
+    return train_data, val_data, encode, decode, len(word2id)
 
 
 def split_data(data):

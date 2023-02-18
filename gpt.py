@@ -29,6 +29,7 @@ def estimate_loss():
         losses = torch.zeros(eval_iters)
         for k in range(eval_iters):
             X, Y = get_batch(train_data, val_data, block_size, batch_size,split)
+            X, Y = X.to(device), Y.to(device)
             logits, loss = model(X, Y)
             losses[k] = loss.item()
         out[split] = losses.mean()
@@ -171,7 +172,7 @@ if __name__ == "__main__":
 
         # sample a batch of data
         xb, yb = get_batch(train_data, val_data, block_size, batch_size,'train')
-
+        xb, yb = xb.to(device), yb.to(device)
         # evaluate the loss
         logits, loss = model(xb, yb)
         optimizer.zero_grad(set_to_none=True)
@@ -181,10 +182,12 @@ if __name__ == "__main__":
     idx = torch.zeros((1, 1), dtype=torch.long)
     idx.to(device)
     print("Generation Result with training:")
-print(decoder(m.generate(idx, max_new_tokens=300)[0].cpu().tolist()))
+    torch.save(model.state_dict(), '/content')
+    print(decoder(model.generate(idx, max_new_tokens=300)[0].cpu().tolist()))
 
 idx = torch.zeros((1, 1), dtype=torch.long)
 idx.to(device)
 print("Generation Result without training:")
 print(decoder(m.generate(idx, 100)[0].cpu().tolist()))
 print('-------------------------------------------------------- \n')
+
