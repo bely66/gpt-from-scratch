@@ -52,12 +52,14 @@ a baseline model is used to demonstrate the evolution of character modeling from
 ### Notes
 
 1. **Attention** is a communication mechanism where you have a number of nodes in a directed graph where you have
-edges between them
-
-Every node has a **KEY** which is what makes me interesting, a **QUERY** what makes me interested and a **VALUE** what i'll send you if we're a match.
+edges between them, Every node has a **KEY** which is what makes me interesting, a **QUERY** what makes me interested and a **VALUE** what i'll send you if we're a match.
 Edges in the graph is weighted based on the similarity between **QUERY** and **KEY**.
 
 2. **Self-Attention** has no sense of space, it acts on a set of vectors and you have to introduce their positions using positional encodings.
 
 3. There's no communication between the batch dimensions, every example sent to the attention has no relationship to the tokens in other examples in the batch.
+
+4. Encoder and Decoder have one key difference, in Encoder blocks we want all the tokens to talk to each other and that's very important for applications like Sentiment Analysis where the output isn't generative in nature, while in decoders where the network is Causal/Auto-regressive Future nodes aren't allowed to communicate with past nodes
+
+5. In transformers the Attention Mechanism is called Self-Attention because the nodes are attending to themselves using the key-query-value, Cross-Attention is a way to use attention to communicate between decoder and encoder
 
