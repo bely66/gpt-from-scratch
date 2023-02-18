@@ -55,7 +55,9 @@ a baseline model is used to demonstrate the evolution of character modeling from
 edges between them
 
 Every node has a **KEY** which is what makes me interesting, a **QUERY** what makes me interested and a **VALUE** what i'll send you if we're a match.
-
 Edges in the graph is weighted based on the similarity between **QUERY** and **KEY**.
 
 2. **Self-Attention** has no sense of space, it acts on a set of vectors and you have to introduce their positions using positional encodings.
+
+3. There's no communication between the batch dimensions, every example sent to the attention has no relationship to the tokens in other examples in the batch.
+
