@@ -1,12 +1,19 @@
 import torch
-import spacy
 from collections import Counter
 
 def read_file(file_path):
     with open(file_path, 'r') as f:
         text = f.read()
     return text
-
+def encode_text(text, word2id):
+    enc_out = []
+    for word in text.split(' '):
+        if word in word2id:
+            enc_out.append(word2id[word.lower()])
+        else:
+            print(word)
+            enc_out.append(word2id['<UNK>'])
+    return enc_out
 def load_data(file_path, min_freq=3):
     text = read_file(file_path)
     word2id = {'<PAD>':0, '<UNK>':1}
@@ -23,7 +30,7 @@ def load_data(file_path, min_freq=3):
         word2id[word] = wid
         id2word[wid] = word
 
-    encode = lambda s: [word2id[c.lower()] if c in word2id else word2id['<UNK>'] for c in s.strip().split()]
+    encode = lambda s: [word2id[c.lower()] if c.lower() in word2id else word2id['<UNK>'] for c in s.strip().split()]
     decode = lambda e: ' '.join([id2word[i] for i in e])
     data = torch.tensor(encode(text), dtype=torch.long)
     train_data, val_data = split_data(data)

@@ -7,7 +7,6 @@ from data_loader import load_data, get_batch
 torch.manual_seed(1337)
 
 ## Hyper-Parameters
-vocab_size = 65
 batch_size = 256
 head_size = 16
 block_size = 8
@@ -20,6 +19,9 @@ n_embed = 384
 n_head = 6
 n_layer = 6
 dropout = 0.2
+
+data_path = 'input.txt'
+train_data, val_data, encoder, decoder, vocab_size = load_data(data_path)
 
 @torch.no_grad()
 def estimate_loss():
@@ -185,9 +187,9 @@ if __name__ == "__main__":
     torch.save(model.state_dict(), '/content')
     print(decoder(model.generate(idx, max_new_tokens=300)[0].cpu().tolist()))
 
-idx = torch.zeros((1, 1), dtype=torch.long)
-idx.to(device)
-print("Generation Result without training:")
-print(decoder(m.generate(idx, 100)[0].cpu().tolist()))
-print('-------------------------------------------------------- \n')
+    idx = torch.zeros((1, 1), dtype=torch.long)
+    idx.to(device)
+    print("Generation Result without training:")
+    print(decoder(m.generate(idx, 100)[0].cpu().tolist()))
+    print('-------------------------------------------------------- \n')
 
