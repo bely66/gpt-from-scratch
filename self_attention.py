@@ -1,7 +1,7 @@
 import torch
 from time import time
 torch.manual_seed(1337)
-
+torch.set_printoptions(sci_mode=False)
 B, T, C = 4, 8, 2
 
 x = torch.randn(B, T, C)
@@ -67,3 +67,21 @@ v = value(x)
 out = wei @ v
 
 print(out.shape)
+
+
+## Scaled Attention
+print("----------------------------------------------")
+print('')
+print("Scaled Attention Section")
+k = torch.randn((B, T, 16)) # (B, T, 16)
+q = torch.randn((B, T, 16)) # (B, T, 16)
+wei = q @ k.transpose(-2, -1) # (B, T, 16) * (B, 16, T) -> (B, T, T)
+wei_s = torch.nn.functional.softmax(wei, dim=-1)
+print(f"Before Normalization Variance of weights:{wei.var()}, keys:{k.var()}, query:{q.var()}")
+print(f"Weights Before Normalization:{wei[0][0]}")
+print(f"Softmax Before Normalization: {wei_s[0][0]} and sum: {wei_s[0][0].sum()}")
+wei *= (16**-0.5)
+wei_s = torch.nn.functional.softmax(wei, dim=-1)
+print(f"After Normalization Variance of weights:{wei.var()}, keys:{k.var()}, query:{q.var()}")
+print(f"Weights After Normalization:{wei[0][0]}")
+print(f"Softmax After Normalization: {wei_s[0][0]} and sum: {wei_s[0][0].sum()}")
