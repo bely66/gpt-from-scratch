@@ -46,3 +46,16 @@ a baseline model is used to demonstrate the evolution of character modeling from
 
 ### GPT
 **Generative-Pretrained-Transformer**
+
+
+
+### Notes
+
+1. **Attention** is a communication mechanism where you have a number of nodes in a directed graph where you have
+edges between them
+
+Every node has a **KEY** which is what makes me interesting, a **QUERY** what makes me interested and a **VALUE** what i'll send you if we're a match.
+
+Edges in the graph is weighted based on the similarity between **QUERY** and **KEY**.
+
+2. **Self-Attention** has no sense of space, it acts on a set of vectors and you have to introduce their positions using positional encodings.
