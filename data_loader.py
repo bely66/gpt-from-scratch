@@ -1,10 +1,18 @@
 import torch
 from collections import Counter
+import re
 
 def read_file(file_path):
     with open(file_path, 'r') as f:
         text = f.read()
     return text
+
+
+def clean_emojis(text):
+    text = re.sub(r"(@\[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?", "", text)
+    return text
+
+
 def encode_text(text, word2id):
     enc_out = []
     for word in text.split(' '):
@@ -16,9 +24,9 @@ def encode_text(text, word2id):
     return enc_out
 def load_data(file_path, min_freq=3):
     text = read_file(file_path)
+    text = clean_emojis(text)
     word2id = {'<PAD>':0, '<UNK>':1}
     id2word = {0:'<PAD>', 1:'<UNK>'}
-    word_freq = {}
 
     wc = Counter()
     for word in text.strip().split(' '):
