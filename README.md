@@ -4,7 +4,8 @@
 - [ ] Split gpt.py into two scripts, train_gpt.py and model_gpt.py
 - [ ] Add terminal parameters to test_gpt.py to take (text_file_path, model_path, prompt)
 - [ ] Generate independent models (Scripted models which requires torch 2x, that will make the models independent of the class)
-
+- [ ] Generalized Dictionary/Vocab of words so that the architecture doesn't change with every dataset, suitable for large scale models
+- [ ] Check available sub-word tokenizers, as it can greatly improve the results (for ex. OpenAI Tiktoken tokenizer)
 ## Dataset
 We're using the tiny shakespeare dataset, which consists of all the writings by shakespeare.
 
