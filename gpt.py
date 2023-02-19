@@ -20,8 +20,8 @@ n_head = 6
 n_layer = 6
 dropout = 0.2
 
-data_path = 'input.txt'
-train_data, val_data, encoder, decoder, vocab_size = load_data(data_path)
+data_path = 'data/Rick_lines.txt'
+train_data, val_data, encoder, decoder, vocab_size = load_data(data_path, min_freq=0)
 
 @torch.no_grad()
 def estimate_loss():
